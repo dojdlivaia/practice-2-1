@@ -1,5 +1,5 @@
 import './styles.css';
-import { formatBook, Book, Catalog } from './task1-types';
+import { formatBook, Book, Catalog, BookFilter } from './task1-types';
 import { addBook } from './task2-functions';
 import { createBookFromForm } from './task4-integration';
 import { applyFilters, filterByAuthor, filterByMinYear } from './task3-filters';
@@ -46,6 +46,18 @@ document.getElementById('bookForm')?.addEventListener('submit', (e) => {
 });
 
 // Обработчик фильтров
-document.getElementById('applyFilters')?.addEventListener('click', () => {
-  // TODO: Применить фильтры, перерисовать
+filtersBtn.addEventListener('click', () => {
+  const activeFilters: BookFilter[] = [];
+
+  if (authorsInput.value.trim()) {
+    activeFilters.push(filterByAuthor(authorsInput.value.trim()));
+  }
+
+  if (yearInput.value) {
+    activeFilters.push(filterByMinYear(Number.parseInt(yearInput.value, 10)));
+  }
+
+  const allBooksArray = Object.values(initialBooks);
+  const filteredBooks = applyFilters(allBooksArray, activeFilters);
+  renderBooks(filteredBooks);
 });
